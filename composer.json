@@ -1,0 +1,28 @@
+{
+    "name": "woren951/oembeds",
+    "description": "Laravel OEmbeds parser",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Woren951\\OEmbeds\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^7.3|^8.0",
+        "guzzlehttp/guzzle": "^7.3"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Oleh Kotyay",
+            "email": "woren951@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Woren951\\OEmbeds\\Providers\\OEmbedsServiceProvider"
+            ]
+        }
+    }
+}
