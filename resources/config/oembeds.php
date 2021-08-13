@@ -12,32 +12,34 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | OEmbed drivers Configuration
+    | OEmbed enabled drivers
     |--------------------------------------------------------------------------
     */
 
     'drivers' => [
+        FacebookPost::class,
+        FacebookVideo::class,
+        Instagram::class,
+        Twitter::class,
+        Youtube::class,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | OEmbed drivers configuration
+    |--------------------------------------------------------------------------
+    */
+
+    'configs' => [
         FacebookPost::class => [
-            'config' => [
-                'access_token' => env('FACEBOOK_ACCESS_TOKEN')
-            ],
+            'access_token' => env('FACEBOOK_ACCESS_TOKEN')
         ],
-
         FacebookVideo::class => [
-            'config' => [
-                'access_token' => env('FACEBOOK_ACCESS_TOKEN')
-            ],
+            'access_token' => env('FACEBOOK_ACCESS_TOKEN')
         ],
-
         Instagram::class => [
-            'config' => [
-                'access_token' => env('FACEBOOK_ACCESS_TOKEN')
-            ],
+            'access_token' => env('FACEBOOK_ACCESS_TOKEN')
         ],
-
-        Twitter::class => [],
-
-        Youtube::class => [],
     ],
 
 ];

@@ -2,9 +2,9 @@
 
 namespace Woren951\OEmbeds\Drivers;
 
-use Woren951\OEmbeds\Interfaces\OEmbedDriver;
+use Woren951\OEmbeds\Support\AbstractDriver;
 
-class Twitter implements OEmbedDriver
+class Twitter extends AbstractDriver
 {
     /**
      * @return string
