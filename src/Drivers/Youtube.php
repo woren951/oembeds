@@ -2,7 +2,14 @@
 
 namespace Woren951\OEmbeds\Drivers;
 
+use GuzzleHttp\Exception\ClientException;
+use JsonException;
 use Woren951\OEmbeds\Support\AbstractDriver;
+
+use Woren951\OEmbeds\Exceptions\{
+    BadRequestException,
+    UnauthorizedException
+};
 
 class Youtube extends AbstractDriver
 {
@@ -19,7 +26,7 @@ class Youtube extends AbstractDriver
      */
     public function endpoint(): string
     {
-        return 'https://www.youtube.com/oembed?format=json&url=:url';
+        return 'https://www.youtube.com/oembed';
     }
 
     /**
@@ -30,5 +37,32 @@ class Youtube extends AbstractDriver
         return [
             '~youtube\.com|youtu\.be~i'
         ];
+    }
+
+    /**
+     * @param string $target
+     * @return array
+     *
+     * @throws UnauthorizedException|BadRequestException|JsonException
+     */
+    public function extract(string $target): array
+    {
+        try {
+            $response = $this->manager->httpClient()
+                ->request('GET', $this->endpoint(), [
+                    'query' => [
+                        'format' => 'json',
+                        'url' => $target,
+                    ],
+                ]);
+        } catch (ClientException $e) {
+            if ($e->getCode() === 401) {
+                throw UnauthorizedException::make($e);
+            }
+
+            throw BadRequestException::make($e);
+        }
+
+        return json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
     }
 }

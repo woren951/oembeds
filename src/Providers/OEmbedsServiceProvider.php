@@ -22,7 +22,7 @@ class OEmbedsServiceProvider extends ServiceProvider
 
             foreach ($config->get('oembeds.drivers') as $driver) {
                 $manager->registerDriver(
-                    new $driver($config->get("oembeds.configs.{$driver}", []))
+                    new $driver($manager, $config->get("oembeds.configs.{$driver}", []))
                 );
             }
 

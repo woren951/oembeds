@@ -18,4 +18,10 @@ interface OEmbedDriver
      * @return array
      */
     public function filters(): array;
+
+    /**
+     * @param string $target
+     * @return array
+     */
+    public function extract(string $target): array;
 }

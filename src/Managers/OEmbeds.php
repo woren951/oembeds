@@ -2,15 +2,13 @@
 
 namespace Woren951\OEmbeds\Managers;
 
-use Closure;
 use InvalidArgumentException;
 use Woren951\OEmbeds\Interfaces\OEmbedDriver;
 
 use GuzzleHttp\{
-    Exception\ClientException,
-    Client
+    Client,
+    ClientInterface
 };
-use Woren951\OEmbeds\Exceptions\BadRequestException;
 
 class OEmbeds
 {
@@ -20,21 +18,16 @@ class OEmbeds
     protected $drivers = [];
 
     /**
-     * @var Closure|null
+     * @var ClientInterface
      */
-    protected $httpResolver;
-
-    /**
-     * @var Client
-     */
-    protected $defaultHttpClient;
+    protected $httpClient;
 
     /**
      * @return void
      */
     public function __construct()
     {
-        $this->defaultHttpClient = new Client();
+        $this->httpClient = new Client();
     }
 
     /**
@@ -45,41 +38,7 @@ class OEmbeds
     {
         $driver = $this->matchDriver($target);
 
-        $oembed = [];
-
-        if ($this->httpResolver) {
-            $oembed = $this->httpResolver($target, $driver);
-
-            return $oembed;
-        }
-
-        try {
-            $oembed = $this->defaultHttpClient->request(
-                'GET',
-                $this->endpoint($driver, $target)
-            );
-        } catch (ClientException $ce) {
-            throw (new BadRequestException("Bad request!", 400, $ce))
-                ->setResponseCode(
-                    $ce->getCode()
-                )
-                ->setResponseBody(
-                    $ce->getResponse()->getBody()->getContents()
-                );
-        }
-
-        return $oembed;
-    }
-
-    /**
-     * @param Closure $httpResolver
-     * @return self
-     */
-    public function setHttpResolver(Closure $httpResolver): self
-    {
-        $this->httpResolver = $httpResolver;
-
-        return $this;
+        return $driver->extract($target);
     }
 
     /**
@@ -94,15 +53,22 @@ class OEmbeds
     }
 
     /**
-     * @param OEmbedDriver $driver
-     * @param string $target
-     * @return string
+     * @param ClientInterface $client
+     * @return $this
      */
-    public function endpoint(OEmbedDriver $driver, string $target): string
+    public function setHttpClient(ClientInterface $client): self
     {
-        $endpoint = $driver->endpoint();
+        $this->httpClient = $client;
 
-        return str_replace(':url', $target, $endpoint);
+        return $this;
+    }
+
+    /**
+     * @return ClientInterface
+     */
+    public function httpClient(): ClientInterface
+    {
+        return $this->httpClient;
     }
 
     /**
