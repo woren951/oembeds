@@ -63,6 +63,22 @@ class Twitter extends AbstractDriver
             throw BadRequestException::make($e);
         }
 
-        return json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+        return array_merge(
+            json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR),
+            [
+                'id' => $this->resolveId($target)
+            ]
+        );
+    }
+
+    /**
+     * @param string $target
+     * @return string
+     */
+    protected function resolveId(string $target): string
+    {
+        preg_match('/status\/(.+)/', $target, $matches);
+
+        return $matches[1];
     }
 }
