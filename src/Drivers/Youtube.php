@@ -77,7 +77,7 @@ class Youtube extends AbstractDriver
      */
     protected function resolveId(string $target): string
     {
-        preg_match('/v=(.+)/', $target, $matches);
+        preg_match('/v=(.+)$|&/', $target, $matches);
 
         return $matches[1];
     }
