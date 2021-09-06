@@ -35,7 +35,7 @@ class Twitter extends AbstractDriver
     public function filters(): array
     {
         return [
-            '~twitter\.com/[a-zA-Z0-9_]+/status(es)?/.+~i'
+            '/twitter\.com\/[a-zA-Z0-9_]+\/status(es)?\/.+/'
         ];
     }
 

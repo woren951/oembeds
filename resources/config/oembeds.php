@@ -3,8 +3,11 @@
 use Woren951\OEmbeds\Drivers\{
     FacebookPost,
     FacebookVideo,
+    Infogram,
     Instagram,
+    Soundcloud,
     Twitter,
+    Vimeo,
     Youtube
 };
 
@@ -19,8 +22,11 @@ return [
     'drivers' => [
         FacebookPost::class,
         FacebookVideo::class,
+        Infogram::class,
         Instagram::class,
+        Soundcloud::class,
         Twitter::class,
+        Vimeo::class,
         Youtube::class,
     ],
 

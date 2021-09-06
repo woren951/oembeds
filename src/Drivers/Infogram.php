@@ -11,15 +11,14 @@ use Woren951\OEmbeds\Exceptions\{
     UnauthorizedException
 };
 
-
-class FacebookVideo extends AbstractDriver
+class Infogram extends AbstractDriver
 {
     /**
      * @return string
      */
     public static function id(): string
     {
-        return 'facebook-video';
+        return 'infogram';
     }
 
     /**
@@ -27,7 +26,7 @@ class FacebookVideo extends AbstractDriver
      */
     public function endpoint(): string
     {
-        return 'https://graph.facebook.com/v11.0/oembed_video';
+        return 'https://infogram.com/oembed';
     }
 
     /**
@@ -36,7 +35,7 @@ class FacebookVideo extends AbstractDriver
     public function filters(): array
     {
         return [
-            '~facebook\.com\/.+\/videos\/.*~i'
+            '~infogram\.com~i'
         ];
     }
 
@@ -54,7 +53,6 @@ class FacebookVideo extends AbstractDriver
                     'query' => [
                         'format' => 'json',
                         'url' => $target,
-                        'access_token' => $this->config['access_token']
                     ],
                 ]);
         } catch (ClientException $e) {
@@ -65,6 +63,22 @@ class FacebookVideo extends AbstractDriver
             throw BadRequestException::make($e);
         }
 
-        return json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+        return array_merge(
+            json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR),
+            [
+                'id' => $this->resolveId($target)
+            ]
+        );
+    }
+
+    /**
+     * @param string $target
+     * @return string
+     */
+    protected function resolveId(string $target): string
+    {
+        preg_match('/infogram.com\/(.+)/', $target, $matches);
+
+        return $matches[1];
     }
 }

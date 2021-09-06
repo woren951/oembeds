@@ -36,7 +36,7 @@ class Instagram extends AbstractDriver
     public function filters(): array
     {
         return [
-            '~instagr(\.am|am\.com)/p/.+~i'
+            '~instagr(\.am|am\.com)\/p\/.+~i'
         ];
     }
 
